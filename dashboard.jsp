@@ -6,7 +6,7 @@
     <title>Course Dashboard</title>
 </head>
 <body>
-    <h1>Welcome, ${username}!</h1>
+    <h1>Welcome, ${sessionScope.username}!</h1>
     <a href="LogoutServlet">Logout</a>
     
     <h2>Available Courses</h2>
@@ -17,22 +17,29 @@
             <th>Instructor</th>
             <th>Action</th>
         </tr>
-        <%-- Will be populated by DashboardServlet --%>
         <c:forEach items="${courses}" var="course">
             <tr>
-                <td>${course.id}</td>
-                <td>${course.name}</td>
+                <td>${course.courseId}</td>
+                <td>${course.courseName}</td>
                 <td>${course.instructor}</td>
-                <td><a href="EnrollServlet?courseId=${course.id}">Enroll</a></td>
+                <td>
+                    <c:choose>
+                        <c:when test="${enrolledCourses.contains(course.courseId)}">
+                            Enrolled
+                        </c:when>
+                        <c:otherwise>
+                            <a href="EnrollServlet?courseId=${course.courseId}">Enroll</a>
+                        </c:otherwise>
+                    </c:choose>
+                </td>
             </tr>
         </c:forEach>
     </table>
 
-    <h2>Your Enrolled Courses</h2>
+    <h2>Your Enrolled Course IDs</h2>
     <ul>
-        <%-- Will display enrolled courses from session --%>
-        <c:forEach items="${enrolledCourses}" var="course">
-            <li>${course.name} (${course.id})</li>
+        <c:forEach items="${enrolledCourses}" var="courseId">
+            <li>${courseId}</li>
         </c:forEach>
     </ul>
 </body>
